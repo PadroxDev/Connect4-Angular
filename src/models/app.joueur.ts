@@ -1,4 +1,7 @@
-
+/**
+ * Represents a the Player class.
+ * @constructor
+ */
 export class Joueur {
     NomJoueur!: String;
     Score!: number;

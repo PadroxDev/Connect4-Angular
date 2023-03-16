@@ -44,6 +44,7 @@ export class DebutPartieComponent implements OnInit
   // Clic sur la matrice
   Clique(i: number, j:number)
   {
+    
     // Si un des joueurs atteint 3 victoire, alors la partie s'arrête
     if(this.Data[0].getScore()<3 && this.Data[1].getScore()<3)
     {
@@ -53,36 +54,20 @@ export class DebutPartieComponent implements OnInit
     const maCellule = document.getElementById(`${Tombe}-${j}`);
     if (maCellule && this.MatricePuissance4Service.MaMatrice[Tombe][j] == 0){
       // On cherche a savoir quel joueur joue (Le Joueur 1 ou Le Joueur 2)
-      if(this.tourJoueur==false)
-      {
-        this.tourJoueur=true;
-        // On met a jour le texte pour le joueur 2
-        maCellule.classList.add('Joueur2');
-        // Le joueur 2 remplis la matrice avec un jeton "1"
-        this.MatricePuissance4Service.MaMatrice[Tombe][j]=1;
-        // On cherche a savoir si le joueur 2 gagne
-        this.etatPartie = !this.MatricePuissance4Service.gagne(Tombe, j, 1);
-        if(this.etatPartie == false){
-          console.log("Joueur 2 a gagné");
-          // On incrémente le score
-          this.Data[1].setScore(this.Data[1].getScore() + 1);
-        }
-      }
-      else
-      {
-        this.tourJoueur=false;
-        // On met a jour le texte pour le joueur 1
-        maCellule.classList.add('Joueur1');
-        // Le joueur 1 remplis la matrice avec un jeton "2"
-        this.MatricePuissance4Service.MaMatrice[Tombe][j]=2;
-        // On cherche a savoir si le joueur 1 gagne
-        this.etatPartie = !this.MatricePuissance4Service.gagne(Tombe, j, 2);
-        if(this.etatPartie == false){
-          console.log("Joueur 1 a gagné");
-          // On incrémente le score
-          this.Data[0].setScore(this.Data[0].getScore() + 1);
-        }
-      }
+
+      this.tourJoueur = !this.tourJoueur;
+      var joueur : number = +this.tourJoueur;
+
+      maCellule.classList.add(`Joueur${joueur+1}`);
+      // Le joueur 2 remplis la matrice avec un jeton "1"
+      this.MatricePuissance4Service.MaMatrice[Tombe][j]=joueur+1;
+      // On cherche a savoir si le joueur 2 gagne
+      this.etatPartie = !this.MatricePuissance4Service.gagne(Tombe, j, joueur+1);
+      if(this.etatPartie == false){
+        console.log(`Joueur ${joueur+1} a gagné`);
+        // On incrémente le score
+        this.Data[joueur].setScore(this.Data[joueur].getScore() + 1);
+      } // TODO: Add égalité
     }
     // On regarde si la partie est terminée
     if(this.etatPartie==false){
